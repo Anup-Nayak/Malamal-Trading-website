@@ -1,2 +1,5 @@
 pandas
-juggad-data
+jugaad-data
+datetime
+matplotlib
+pyarrow
