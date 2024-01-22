@@ -12,9 +12,15 @@ import pyarrow
 
 
 stock_name = sys.argv[1]
-year = int(sys.argv[2])
+yearI = sys.argv[2]
+try:
+    global year
+    year = int(yearI)
+except ValueError:
+    print("That's not a valid input for number of years, please input non-negative integer")
+    quit()
 
-file_extensions = [".csv", ".txt" , ".json", ".html",".parquet",".xlsx",".feather",".png"]
+file_extensions = [".csv", ".txt" , ".json", ".html",".parquet",".feather",".png"]
 file_names = []
 
 for i in range(0,len(file_extensions)):
@@ -84,12 +90,12 @@ sizes.append((path.getsize(file_names[indx]))/1024)
 indx += 1
 
 #to excel
-stime = time.time()
-df.to_excel(file_names[indx], sheet_name=stock_name)
-etime = time.time()
-times.append((etime-stime)*1000)
-sizes.append((path.getsize(file_names[indx]))/1024)
-indx += 1
+# stime = time.time()
+# df.to_excel(file_names[indx], sheet_name=stock_name)
+# etime = time.time()
+# times.append((etime-stime)*1000)
+# sizes.append((path.getsize(file_names[indx]))/1024)
+# indx += 1
 
 #to feather (binary)
 stime = time.time()
@@ -105,13 +111,16 @@ for i in range(0,len(file_names)-1):
 
 # l = ['csv','txt','json','html','parquet','excel','feather']
     
-color =['blue','orange','green','red','purple','pink','black']
+color =['blue','orange','green','red','purple','black']
 
-#try to catch and flag erroronous inputs
 
 for i in range (0,len(l)):
     plt.scatter(times[i],sizes[i],c=color[i],label=l[i])
 plt.legend()
+
+# for i, j in zip(times, sizes):
+#    plt.text(i, j+1, '({}, {})'.format(int(i), int(j)))
+
 plt.xscale('log')
 plt.yscale('log')
 plt.grid()
