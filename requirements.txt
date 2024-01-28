@@ -1,5 +1,0 @@
-pandas
-jugaad-data
-datetime
-matplotlib
-pyarrow
