@@ -2,6 +2,8 @@ from flask import Flask, render_template, request, redirect, url_for, flash, ses
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 
+NIFTY50 = ["SBIN","HDFC"]
+
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'  # Replace with your actual secret key
 
@@ -15,6 +17,14 @@ class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(100), unique=True, nullable=False)
     password_hash = db.Column(db.String(200), nullable=False)
+    stocks = db.relationship('Stock', backref='user', lazy=True)
+
+class Stock(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    symbol = db.Column(db.String(10), nullable=False)
+    name = db.Column(db.String(100), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+
 
 # Initialize Database within Application Context
 with app.app_context():
@@ -37,22 +47,25 @@ def register():
 
         flash('Registration successful! Please login.')
         return redirect(url_for('index'))
-
-    return render_template('register.html')
-
-@app.route('/login', methods=['POST'])
-def login():
-    username = request.form['username']
-    password = request.form['password']
-    user = User.query.filter_by(username=username).first()
-
-    if user and check_password_hash(user.password_hash, password):
-        session['user_id'] = user.id
-        session['username'] = user.username
-        return redirect(url_for('dashboard'))
     else:
-        flash('Invalid username or password')
-        return redirect(url_for('index'))
+        return render_template('register.html')
+
+@app.route('/login', methods=['GET','POST'])
+def login():
+    if request.method == 'GET':
+        return redirect(url_for('register'))
+    else:
+        username = request.form['username']
+        password = request.form['password']
+        user = User.query.filter_by(username=username).first()
+
+        if user and check_password_hash(user.password_hash, password):
+            session['user_id'] = user.id
+            session['username'] = user.username
+            return redirect(url_for('dash'))
+        else:
+            flash('Invalid username or password')
+            return redirect(url_for('index'))
 
 @app.route('/dashboard')
 def dashboard():
@@ -67,21 +80,38 @@ def logout():
     session.pop('username', None)
     return redirect(url_for('index'))
 
-@app.route('/stock')
+@app.route('/stock',methods = ['POST','GET'])
 def stock():
-    return render_template('stock.html',username=session['username'])
+    if 'user_id' not in session:
+        return redirect(url_for('index'))
+    else:
+        userid = session['user_id']
+        username = session['username']
+        if request.method == 'POST':
+            stkName = request.form['stockName']
+            stkSym = request.form['stockSym']
+
+            if stkSym in NIFTY50:
+                user = User.query.filter_by(username=username).first()
+                new_stock = Stock(symbol= stkSym,name = stkName,user = user)
+                db.session.add(new_stock)
+                db.session.commit()
+            else:
+                flash('Enter correct stock .')
+                return redirect(url_for('stock'))
+        return render_template('stock.html',username=username,data=Stock.query.filter_by(user_id=userid).all())
 
 @app.route('/dash', methods=['GET', 'POST'])
 def dash():
     if 'user_id' in session:
 
-        stocks = [
+        stocky = [
         {"symbol": "AAPL", "name": "Apple Inc."},
         {"symbol": "GOOGL", "name": "Alphabet Inc."},
         {"symbol": "MSFT", "name": "Microsoft Corporation"}
         ]
 
-        return render_template('dash.html',stocks=stocks)
+        return render_template('dash.html',stocks=stocky)
     else:
         flash('Please LOGIN!')
         return redirect(url_for('index'))
