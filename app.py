@@ -104,9 +104,18 @@ def stock():
 @app.route('/dash', methods=['GET', 'POST'])
 def dash():
     if 'user_id' in session:
+        if request.method == 'POST':
+            val = request.form.get('operationType')
+            if(val == 'view'):
+                return redirect(url_for('view'))
+            elif(val == 'buy'):
+                return redirect(url_for('stock'))
+            else:
+                return redirect(url_for('buy'))
         userid = session['user_id']
         username = session['username']
         return render_template('dash.html',username=username,stocks=Stock.query.filter_by(user_id=userid).all())
+
     else:
         flash('Please LOGIN!')
         return redirect(url_for('index'))
