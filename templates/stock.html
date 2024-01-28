@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Welcome to the Home Page!</h1>
+    <body>
+        <div class="welcome-container">
+            <h1>Welcome, {{ username }}!</h1>
+            <p>Here is the data for stock.</p>
+            <a href="/logout" class="logout-button">Logout</a>
+        </div>
+    </body>
+{% endblock %}
+
+
+<!-- <!DOCTYPE html>
+<html>
+<head>
+    <title>Data</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="welcome-container">
+        <h1>Welcome, {{ username }}!</h1>
+        <p>Here is the data for stock.</p>
+        <a href="/logout" class="logout-button">Logout</a>
+    </div>
+</body>
+</html> -->

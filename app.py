@@ -67,5 +67,9 @@ def logout():
     session.pop('username', None)
     return redirect(url_for('index'))
 
+@app.route('/stock')
+def stock():
+    return render_template('stock.html',username=session['username'])
+
 if __name__ == '__main__':
     app.run(debug=True)

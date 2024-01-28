@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='baseStyle.css') }}">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}My Website{% endblock %}</title>
+    <!-- Add your CSS links or stylesheets here -->
+</head>
+<body>
+
+<!-- Navigation Bar -->
+<nav>
+    <ul>
+        <li><a href="#">Home</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Contact</a></li>
+    </ul>
+</nav>
+
+<!-- Sidebar -->
+<aside>
+    <ul>
+        <li><a href="#">Sidebar Item 1</a></li>
+        <li><a href="#">Sidebar Item 2</a></li>
+        <li><a href="#">Sidebar Item 3</a></li>
+    </ul>
+</aside>
+
+<!-- Content Section -->
+<section>
+    {% block content %}{% endblock %}
+</section>
+
+</body>
+</html>
