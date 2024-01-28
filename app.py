@@ -104,14 +104,9 @@ def stock():
 @app.route('/dash', methods=['GET', 'POST'])
 def dash():
     if 'user_id' in session:
-
-        stocky = [
-        {"symbol": "AAPL", "name": "Apple Inc."},
-        {"symbol": "GOOGL", "name": "Alphabet Inc."},
-        {"symbol": "MSFT", "name": "Microsoft Corporation"}
-        ]
-
-        return render_template('dash.html',stocks=stocky)
+        userid = session['user_id']
+        username = session['username']
+        return render_template('dash.html',username=username,stocks=Stock.query.filter_by(user_id=userid).all())
     else:
         flash('Please LOGIN!')
         return redirect(url_for('index'))
