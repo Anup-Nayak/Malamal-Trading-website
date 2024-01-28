@@ -71,5 +71,15 @@ def logout():
 def stock():
     return render_template('stock.html',username=session['username'])
 
+@app.route('/dash', methods=['GET', 'POST'])
+def dash():
+    stocks = [
+    {"symbol": "AAPL", "name": "Apple Inc."},
+    {"symbol": "GOOGL", "name": "Alphabet Inc."},
+    {"symbol": "MSFT", "name": "Microsoft Corporation"}
+    ]
+
+    return render_template('dash.html',stocks=stocks)
+
 if __name__ == '__main__':
     app.run(debug=True)

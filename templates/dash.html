@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Welcome, User!</h1>
+
+    <!-- Stock List -->
+    <h2>Stocks:</h2>
+    <ul>
+        {% for stock in stocks %}
+            <li><a href="#">{{ stock.name }}</a></li>
+        {% endfor %}
+    </ul>
+
+    <!-- Dropdown for Stock Operations -->
+    <h2>Select Operation:</h2>
+    <form action="{{ url_for('dash') }}" method="post">
+        <label for="operationType">Operation Type:</label>
+        <select name="operationType" id="operationType">
+            <option value="view">View Stock</option>
+            <option value="buy">Buy Stock</option>
+            <option value="sell">Sell Stock</option>
+        </select>
+        <button type="submit">Perform Operation</button>
+    </form>
+{% endblock %}
