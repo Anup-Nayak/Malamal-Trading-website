@@ -73,13 +73,18 @@ def stock():
 
 @app.route('/dash', methods=['GET', 'POST'])
 def dash():
-    stocks = [
-    {"symbol": "AAPL", "name": "Apple Inc."},
-    {"symbol": "GOOGL", "name": "Alphabet Inc."},
-    {"symbol": "MSFT", "name": "Microsoft Corporation"}
-    ]
+    if 'user_id' in session:
 
-    return render_template('dash.html',stocks=stocks)
+        stocks = [
+        {"symbol": "AAPL", "name": "Apple Inc."},
+        {"symbol": "GOOGL", "name": "Alphabet Inc."},
+        {"symbol": "MSFT", "name": "Microsoft Corporation"}
+        ]
+
+        return render_template('dash.html',stocks=stocks)
+    else:
+        flash('Please LOGIN!')
+        return redirect(url_for('index'))
 
 if __name__ == '__main__':
     app.run(debug=True)
