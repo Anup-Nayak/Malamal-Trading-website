@@ -1,0 +1,284 @@
+#first{
+   margin-top: 10px;
+   margin-left: 190px;
+   margin-right: 190px;
+   
+     max-width: 1115 px ;
+     max-height: 75 px ;
+     border-color: #ffff;
+    
+    
+     border-style: solid;
+     display: flex;
+}
+
+#second{
+  padding-top: 14px;
+  padding-right: 8px;
+  padding-left: 8px;
+  padding-bottom: 14px;
+   max-width: 200 px ;
+   max-height: 75 px ;
+    margin-left: 10 px;
+    border-color: #ffff;
+     border-radius: 2 px;   
+     border-style: solid;
+}
+#third{
+   padding-top: 6px;
+   padding-right: 8px;
+   padding-left: 28px;
+  
+   max-width: 200 px ;
+   max-height: 75 px ; 
+   border-color: #ffff;
+   border-radius: 2 px;
+   border-width: 20 px;
+   border-style: solid;
+}
+#fourth{
+   padding-top: 6px;
+   padding-right: 28px;
+   padding-left: 28px;
+  
+   max-width: 200 px ;
+   max-height: 75 px ; 
+   border-color: #ffff;
+   border-radius: 2 px;
+   border-width: 20 px;
+   border-style: solid;
+}
+.link{
+
+   font-size: 25 px;
+   color: #81ffe3;
+}
+#fifth{
+  
+   margin-left: 190px;
+   margin-right: 190px; 
+   
+     max-width: 1115 px ;
+     max-height: 60 px ;
+     border-color: #ffff;; 
+     border-style: solid;
+     display: flex;
+}
+#sixth{
+   
+   padding-right: 8px;
+   padding-left: 13px;
+   padding-bottom: 1px;
+   max-width: 200 px ;
+   max-height: 75 px ; 
+   border-color: #ffff;
+   border-radius: 2 px;
+   border-width: 20 px;
+   border-style: solid;
+}
+#seventh{
+  
+   padding-right: 28px;
+   padding-left: 28px;
+   padding-bottom: 1px;
+   max-width: 200 px ;
+   max-height: 75 px ; 
+   border-color: #ffff;
+   border-radius: 2 px;
+   border-width: 20 px;
+   border-style: solid;
+}
+
+#eighth{
+   padding-left: 13px;
+  
+  
+   margin-left: 190px;
+   margin-right: 190px;  
+     max-width: 1115 px ;
+     max-height: 65 px ;
+    
+     border-color: #ffffff;;
+    
+     border-style: solid;
+     display: flex;
+}
+#nineth{
+
+   padding-left: 13px;
+   margin-left: 190px;
+   margin-right: 190px;  
+     max-width: 1115 px ;
+     max-height: 1000 px ;
+    
+     border-color: #ffffff;;
+     justify-content: space-around;
+     border-style: solid;
+     display: flex;
+}
+#tenth{
+
+  
+     max-width: 1000 px ;
+     max-height: 121 px ;
+    
+     border-color: #ffff;
+    
+     border-style: solid;
+    
+}
+#tenth1{
+
+   
+   max-width: 1000 px ;
+   max-height: 121 px ;
+  
+   border-color: #ffff;
+  
+   border-style: solid;
+   display: flex;
+}
+#tenth11{
+
+   
+   max-width: 200 px ;
+   max-height: 121 px ;
+   padding-right: 420px;
+   border-color: #ffff;
+  
+   border-style: solid;
+   display: flex;
+}
+#tenth12{
+
+   
+   max-width: 200 px ;
+   max-height: 121 px ;
+  
+   border-color: #ffff;
+  
+   border-style: solid;
+   display: flex;
+}
+#tenth2{
+
+  
+   max-width: 1000 px ;
+   max-height: 100 px ;
+  
+   border-color: #ffff;
+  
+   border-style: solid;
+   display: flex;
+   justify-content: space-around;
+   
+}
+#newFormdiv{
+   max-width: 200 px ;
+   max-height: 121 px ;
+   margin-top: 50px;
+   padding-left: 60px;
+   border-color: #ffff;
+   
+   border-style: solid;
+}
+
+
+.new{
+  
+   border: 1px solid #ddd;
+   border-radius: 10px;
+   padding-left: 50px;
+   padding-right: 50px;
+   padding-top: 23px;
+   padding-bottom: 23px;
+   border-width: 2px;
+   margin-top: 4px;
+   margin-bottom: 4px;
+   margin-right: 4px;
+   margin-left: 4px;
+
+}
+#tenth21{
+
+   
+   max-width: 200 px ;
+   max-height: 121 px ;
+   padding-right: 60px;
+   padding-left: 60px;
+   border-color: #ffff;
+   
+   border-style: solid;
+ 
+}
+#eleventh{
+
+   
+     max-width: 1115 px ;
+     max-height: 1000 px ;
+    
+     border-color: #ffff;
+     padding-right: 60px;
+     border-style: solid;
+    
+}
+#twelth{
+
+   
+   max-width: 1115 px ;
+   max-height: 1000 px ;
+  
+   border-color: #ffff;
+   padding-right: 60px;
+   border-style: solid;
+  
+}
+#thirteenth{
+
+   
+   max-width: 1115 px ;
+   max-height: 1000 px ;
+  
+   border-color: #ffff;
+   padding-right: 60px;
+   border-style: solid;
+  
+}
+
+
+form {
+   margin-top: 20px;
+ 
+}
+
+label {
+   display: block;
+   margin-bottom: 5px;
+   color: #555;
+}
+
+select, button {
+   padding: 10px;
+   border: none;
+   border-radius: 5px;
+   margin-bottom: 15px;
+   background-color: #ccc;
+   transition: background-color 0.3s ease, color 0.3s ease, transform 0.2s ease;
+}
+
+select {
+   width: 100%;
+}
+
+button {
+   background-color: #27ae60;
+   color: white;
+   cursor: pointer;
+   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+button:hover {
+   background-color: #219653;
+   transform: scale(1.05);
+}
+
