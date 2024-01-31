@@ -8,7 +8,57 @@ from dateutil.relativedelta import relativedelta
 from datetime import date
 from plotly.offline import iplot
 
-NIFTY50 = ["SBIN","HDFC","ZER","anup"]
+NIFTY50 = [
+    "ADANIENT",
+    "ADANIPORTS",
+    "APOLLOHOSP",
+    "ASIAN PAINTS",
+    "AXISBANK",
+    "BAJAJ-AUTO",
+    "BAJFINANCE",
+    "BAJAJFINSV",
+    "BPCL",
+    "BHARTIARTL",
+    "BRITANNIA",
+    "CIPLA",
+    "COALINDIA"
+    "DIVISLAB",
+    "DRREDDY",
+    "EICHERMOT",
+    "GRASIM",
+    "HCLTECH",
+    "HDFCBANK",
+    "HERONOTOCO",
+    "HDFCLIFE",
+    "HINDALCO",
+    "HINDUNILVR"
+    "ICICIBANK",
+    "ITC",
+    "INDUSINDBK"
+    "INFY",
+    "JSW STEEL",
+    "KOTAKBANK",
+    "LTIM"
+    "LT",
+    "MARUTI",
+    "NTPC",
+    "NESTLEIND"
+    "ONGC",
+    "POWERGRID",
+    "RELIANCE",
+    "SBIN",
+    "SUNPHARMA",
+    "TCS",
+    "TATACONUM",
+    "TATAGOLD",
+    "TATAMOTORS",
+    "TATASTEEL", 
+    "TECHM",
+    "TITAN",
+    "UPL",
+    "ULTRACEMCO",
+    "WIPRO"]
+
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'  # Replace with your actual secret key
@@ -129,6 +179,34 @@ def sell():
                 return redirect(url_for('dashboard'))
         return render_template('sell.html',username=username,data=Stock.query.filter_by(user_id=userid).all())
 
+
+@app.route('/view', methods = ['POST','GET'])
+def view():
+    if 'user_id' not in session:
+        return redirect(url_for('index'))
+    else:
+        if request.method == 'GET' :
+            userid = session['user_id']
+            username = session['username']
+            myStockData = Stock.query.filter_by(user_id=userid).all()
+            myStocks = []
+            for stocks in myStockData:
+                myStocks.append(stocks.symbol)
+            endDate = date.today()
+            startDate = endDate - relativedelta(years = 9)
+            dfs=[]
+
+            for stockSym in myStocks:          
+                df = nse.stock_df(stockSym,startDate,endDate)
+                dfs.append(df)
+
+            candlestick_chart = gc(dfs,myStocks)
+            
+            return render_template('stock.html',cc = candlestick_chart)
+        else:
+            return redirect(url_for('dashboard'))
+
+ 
 @app.route('/dashboard', methods=['GET', 'POST'])
 def dashboard():
     if 'user_id' in session:
@@ -153,27 +231,39 @@ def stock(stkName):
 
     if 'user_id' in session:
         username = session['username']
-        if request.method == 'GET':
-            endDate = date.today()
-            startDate = endDate - relativedelta(years = 9)
-            df = nse.stock_df(stkName,startDate,endDate)
-            candlestick_chart = generate_candlestick_chart(df)
-            return render_template('stock.html',cc= candlestick_chart)
+        timeInterval = request.form.get('interval')
+        endDate = date.today()
+        startDate = endDate - relativedelta(years = 9)
+        df = nse.stock_df(stkName,startDate,endDate)
+        df = df.set_index('DATE')
 
-        else:
-            return redirect(url_for('index')) 
+        if timeInterval == 'weekly':
+            # df['DATE'] = pd.to_datetime(df['DATE'])
+            # df = df.set_index('DATE')
+            df = df.resample('W')
+            
+        elif timeInterval == 'monthly':
+            # df['DATE'] = pd.to_datetime(df['DATE'])
+            # df = df.set_index('DATE')
+            df = df.resample('M')
+        
+        # df = df.reset_index()
+        print(df)
+        candlestick_chart = generate_candlestick_chart(df)
+        return render_template('stock.html',cc= candlestick_chart,stock=stkName)
+
     else:
         flash('Please LOGIN!')
         return redirect(url_for('index'))
 
 def generate_candlestick_chart(df):
-    candlestick_trace = go.Candlestick(x=df['DATE'],
+    candlestick_trace = go.Candlestick(x=df.index,
                                        open=df['OPEN'],
                                        high=df['HIGH'],
                                        low=df['LOW'],
                                        close=df['CLOSE'])
 
-    layout = go.Layout(title='Candlestick Chart', xaxis=dict(title='Date'), yaxis=dict(title='Price'),height=800)
+    layout = go.Layout(title='Price vs Time', xaxis=dict(title='Date'), yaxis=dict(title='Price'),height=800)
 
     figure = go.Figure(data=[candlestick_trace], layout=layout)
     return figure.to_html(full_html=False)
@@ -219,6 +309,11 @@ def gc(dfs,stockSyms):
     figure = go.Figure(data=candlestick_traces, layout=layout)
     return figure.to_html(full_html=False)
 
+@app.route('/NIFTY50')
+def nifty():
+    df = pd.read_csv('NIFTY.csv')
+    candlestick_chart = generate_candlestick_chart(df)
+    return render_template('stock.html',cc= candlestick_chart,stock="NIFTY50")
 
 
 if __name__ == '__main__':

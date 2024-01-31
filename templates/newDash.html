@@ -32,9 +32,10 @@
            
                <h3 id = "stk">My Stocks:</h3>
                <ul id = "uld">
-                   {% for stock in stocks %}
-                       <li><a href='/SBIN'>{{ stock.name }}</a></li>
-                   {% endfor %}
+                  {% for stock in stocks %}
+                     {% set link = url_for('stock', stkName=stock.name) %}
+                     <li><a href="{{ link }}">{{ stock.name }}</a></li>
+                  {% endfor %}
                </ul>
         
          </div>
@@ -56,8 +57,9 @@
                            {% for item in nifty50 : %}
 
                            <div id = "tenth2">
-                              <div >
-                                 <h5  class = "new">{{item}}</h5>
+                              <div class="new" >
+                                 {% set link = url_for('stock',stkName = item) %}
+                                 <a href='{{ link }}'>{{ item }}</a>
                               </div>
 
                            </div>

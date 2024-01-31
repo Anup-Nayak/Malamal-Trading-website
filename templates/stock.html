@@ -1,6 +1,48 @@
 {% extends "base.html" %}
 
 {% block content %}
+
+<style>
+    form {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+    
+    .dataSet {
+        display: flex;
+        justify-content: space-between; /* or other values like center, flex-start, flex-end */
+        align-items: center;
+        padding: 10px;
+    }
+
+    input[type="radio"] {
+        margin: 25px; /* Adjust the margin as needed */
+    }
+</style>
+
+    <form method="post" action="{{ url_for('stock',stkName=stock) }}">
+        <div class ="dataSet">
+            <input type="radio" name="interval" id="daily" value="daily" checked>
+            <label for="daily">Daily</label>
+        </div>
+
+        <div class ="dataSet">
+            <input type="radio" name="interval" id="weekly" value="weekly">
+            <label for="weekly">Weekly</label>
+        </div>
+
+        <div class ="dataSet">
+            <input type="radio" name="interval" id="monthly" value="monthly">
+            <label for="monthly">Monthly</label>
+        </div>
+
+        <div class ="dataSet">
+            <button type="submit">Update Chart</button>
+        </div>
+    </form>
+
     <h1> Stock Data : </h1>
     <div>
         {{ cc | safe }}
