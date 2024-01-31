@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block content %}
+   <div id = "fifth">
+        <h3>Welcome {{username}} !!</h3>
+   </div>
+  
+   <div id = "eighth">
+      <h5>MARKET OPENS AT 9:15 AM</h5>
+   </div>
+   <div id = "nineth">
+      <div id = "eleventh">
+       
+        
+            <div class="select">
+               <h3  id = "so" >Start Your Investments :</h3>
+               <div id = "newFormdiv">
+               <form id = "from" action="{{ url_for('dashboard') }}" method="post">
+                
+                   <select  name="operationType" id="operationType">
+                       <option value="view">View Stock</option>
+                       <option value="buy">Buy Stock</option>
+                       <option value="sell">Sell Stock</option>
+                   </select>
+                   <button type="submit">Perform Operation</button>
+                
+               </form>
+            </div>
+           </div>
+
+         <div id = "thirteenth">
+           
+               <h3 id = "stk">My Stocks:</h3>
+               <ul id = "uld">
+                   {% for stock in stocks %}
+                       <li><a href='/SBIN'>{{ stock.name }}</a></li>
+                   {% endfor %}
+               </ul>
+        
+         </div>
+
+      </div>
+
+
+      <div id = "tenth">
+         <div id = "tenth1">
+            <div id = "tenth11">
+               <p>Index</p>
+            </div>
+            <div id = "tenth12">
+               <p>All indices</p>
+            </div>
+       
+                        </div>
+
+                           {% for item in nifty50 : %}
+
+                           <div id = "tenth2">
+                              <div >
+                                 <h5  class = "new">{{item}}</h5>
+                              </div>
+
+                           </div>
+
+                           {% endfor %}
+
+                           
+                           
+
+                           
+                       
+        
+      </div>
+     
+   </div>
+
+{% endblock %}

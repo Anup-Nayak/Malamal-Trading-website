@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>This is where stock (single) data will be shown. </h1>
+    <body>
+        <div class="welcome-container">
+            <h1>Welcome, {{ username }}!</h1>
+            <p>Here is the data for stock.</p>
+
+            <p>Enter the stock you want to purchase: </p>
+
+            <form action="/buy" method="post">
+                <div class="form-group">
+                    <input type="text" name="stockName" placeholder="stock name" >
+                </div>
+                <div class="form-group">
+                    <input type="text" name="stockSym" placeholder="stock symbol" >
+                </div>
+                <div class="form-group">
+                    <button type="submit">BUY</button>
+                </div>
+            </form>
+
+            <p>
+            {% for stock in data: %}
+                <p>{{stock.symbol}} , {{stock.name}}</p>
+            
+            {% endfor %}
+            </p>
+            <a href="/logout" class="logout-button">Logout</a>
+        </div>
+    </body>
+{% endblock %}
+

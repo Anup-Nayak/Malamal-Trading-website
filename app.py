@@ -2,7 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, flash, ses
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 
-NIFTY50 = ["SBIN","HDFC"]
+NIFTY50 = ["SBIN","HDFC","ZER","anup"]
 
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'  # Replace with your actual secret key
@@ -62,17 +62,17 @@ def login():
         if user and check_password_hash(user.password_hash, password):
             session['user_id'] = user.id
             session['username'] = user.username
-            return redirect(url_for('dash'))
+            return redirect(url_for('dashboard'))
         else:
             flash('Invalid username or password')
             return redirect(url_for('index'))
 
-@app.route('/dashboard')
-def dashboard():
-    if 'user_id' in session:
-        return render_template('welcome.html', username=session['username'])
-    else:
-        return redirect(url_for('index'))
+# @app.route('/dashboard')
+# def dashboard():
+#     if 'user_id' in session:
+#         return render_template('welcome.html', username=session['username'])
+#     else:
+#         return redirect(url_for('index'))
 
 @app.route('/logout')
 def logout():
@@ -80,8 +80,31 @@ def logout():
     session.pop('username', None)
     return redirect(url_for('index'))
 
-@app.route('/stock',methods = ['POST','GET'])
-def stock():
+@app.route('/buy',methods = ['POST','GET'])
+def buy():
+    if 'user_id' not in session:
+        return redirect(url_for('index'))
+    else:
+        
+        userid = session['user_id']
+        username = session['username']
+        user = User.query.filter_by(username=username).first()
+        if request.method == 'POST':
+            stkName = request.form['stockName']
+            stkSym = request.form['stockSym']
+
+            
+            if stkSym in NIFTY50:
+                new_stock = Stock(symbol= stkSym,name = stkName,user = user)
+                db.session.add(new_stock)
+                db.session.commit()
+            else:
+                flash('Enter correct stock.')
+                return redirect(url_for('dashboard'))
+        return render_template('buy.html',username=username,data=Stock.query.filter_by(user_id=userid).all())
+    
+@app.route('/sell',methods = ['POST','GET'])
+def sell():
     if 'user_id' not in session:
         return redirect(url_for('index'))
     else:
@@ -93,28 +116,27 @@ def stock():
 
             if stkSym in NIFTY50:
                 user = User.query.filter_by(username=username).first()
-                new_stock = Stock(symbol= stkSym,name = stkName,user = user)
-                db.session.add(new_stock)
+                stock = Stock.query.filter_by(user=user, symbol=stkSym).delete()
                 db.session.commit()
             else:
-                flash('Enter correct stock .')
-                return redirect(url_for('stock'))
-        return render_template('stock.html',username=username,data=Stock.query.filter_by(user_id=userid).all())
+                flash('Enter correct stock.')
+                return redirect(url_for('dashboard'))
+        return render_template('sell.html',username=username,data=Stock.query.filter_by(user_id=userid).all())
 
-@app.route('/dash', methods=['GET', 'POST'])
-def dash():
+@app.route('/dashboard', methods=['GET', 'POST'])
+def dashboard():
     if 'user_id' in session:
         if request.method == 'POST':
             val = request.form.get('operationType')
             if(val == 'view'):
                 return redirect(url_for('view'))
             elif(val == 'buy'):
-                return redirect(url_for('stock'))
-            else:
                 return redirect(url_for('buy'))
+            else:
+                return redirect(url_for('sell'))
         userid = session['user_id']
         username = session['username']
-        return render_template('dash.html',username=username,stocks=Stock.query.filter_by(user_id=userid).all())
+        return render_template('newDash.html',username=username,nifty50= NIFTY50, stocks=Stock.query.filter_by(user_id=userid).all())
 
     else:
         flash('Please LOGIN!')
