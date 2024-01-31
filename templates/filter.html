@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div id = "fifth">
+    <h3>Welcome {{username}} !!</h3>
+</div>
+
+<form action="/filter" method="post">
+    <div class="form-group">
+        <input type="number" name="avg" placeholder="average" >
+    </div>
+    
+    <div class="form-group">
+        <button type="submit">FILTER</button>
+    </div>
+</form>
+
+<div id = "tenth">
+    <div id = "tenth1">
+       <div id = "tenth11">
+          <p>These are the filtered stocks: </p>
+       </div>
+       
+  
+    </div>
+
+                      {% for item in filteredStocks : %}
+
+                      <div id = "tenth2">
+                         <div class="new" >
+                            
+                            <li>{{ item }}</li>
+                         </div>
+
+                      </div>
+
+                      {% endfor %}
+
+                      
+                      
+
+                      
+                  
+   
+ </div>
+
+</div>
+
+
+{% endblock %}
