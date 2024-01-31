@@ -6,6 +6,7 @@ import plotly.graph_objects as go
 from jugaad_data import nse
 from dateutil.relativedelta import relativedelta
 from datetime import date
+from plotly.offline import iplot
 
 NIFTY50 = ["SBIN","HDFC","ZER","anup"]
 
@@ -147,15 +148,15 @@ def dashboard():
         flash('Please LOGIN!')
         return redirect(url_for('index'))
     
-@app.route('/stock',methods=['GET','POST'])
-def stock():
+@app.route('/stock/<stkName>',methods=['GET','POST'])
+def stock(stkName):
 
     if 'user_id' in session:
         username = session['username']
         if request.method == 'GET':
             endDate = date.today()
-            startDate = endDate - relativedelta(years = 2)
-            df = nse.stock_df('SBIN',startDate,endDate)
+            startDate = endDate - relativedelta(years = 9)
+            df = nse.stock_df(stkName,startDate,endDate)
             candlestick_chart = generate_candlestick_chart(df)
             return render_template('stock.html',cc= candlestick_chart)
 
@@ -175,6 +176,47 @@ def generate_candlestick_chart(df):
     layout = go.Layout(title='Candlestick Chart', xaxis=dict(title='Date'), yaxis=dict(title='Price'),height=800)
 
     figure = go.Figure(data=[candlestick_trace], layout=layout)
+    return figure.to_html(full_html=False)
+
+
+@app.route('/stocks',methods=['GET','POST'])
+def stocks():
+    stockSyms = ["SBIN","HDFC"]
+    dfs = []
+    if 'user_id' in session:
+        username = session['username']
+        if request.method == 'GET':
+            endDate = date.today()
+            startDate = endDate - relativedelta(years = 9)
+            for stockSym in stockSyms:          
+                df = nse.stock_df(stockSym,startDate,endDate)
+                dfs.append(df)
+
+
+            candlestick_chart = gc(dfs,stockSyms)
+            
+            return render_template('stock.html',cc= candlestick_chart)
+
+        else:
+            return redirect(url_for('index')) 
+    else:
+        flash('Please LOGIN!')
+        return redirect(url_for('index'))
+
+def gc(dfs,stockSyms):
+    i = 0
+    candlestick_traces = []
+    for df in dfs:
+        candlestick_trace = go.Candlestick(x=df['DATE'],
+                                        open=df['OPEN'],
+                                        high=df['HIGH'],
+                                        low=df['LOW'],
+                                        close=df['CLOSE'],name=stockSyms[i])
+        candlestick_traces.append(candlestick_trace)
+        i = i+1
+    layout = go.Layout(title='Candlestick Chart', xaxis=dict(title='Date'), yaxis=dict(title='Price'),height=800)
+
+    figure = go.Figure(data=candlestick_traces, layout=layout)
     return figure.to_html(full_html=False)
 
 
