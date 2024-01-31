@@ -1,9 +1,8 @@
 {% extends "base.html" %}
 
 {% block content %}
-
-<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dash.css') }}">
-    <h1 id="welcome">Welcome, {{username}}!</h1>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='dash3.css') }}">
+    <h1 id = "welcome">Welcome, User!</h1>
 
     <!-- Stock List -->
     <h3 id = "stk">Stocks:</h3>
@@ -15,7 +14,7 @@
 
     <!-- Dropdown for Stock Operations -->
     <h3  id = "so" >Select Operation:</h3>
-    <form id = "from" action="{{ url_for('dash') }}" method="post">
+    <form  id = "from" action="{{ url_for('dash') }}" method="post">
         <label for="operationType">Operation Type:</label>
         <select name="operationType" id="operationType">
             <option value="view">View Stock</option>

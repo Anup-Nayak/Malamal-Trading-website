@@ -1,0 +1,4 @@
+source venv/bin/activate
+lsof -i :5000 
+kill -9 62659
+deactivate
