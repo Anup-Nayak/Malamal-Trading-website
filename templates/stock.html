@@ -2,34 +2,6 @@
 
 {% block content %}
 
-<style>
-    form {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-    .button-container {
-        display: flex;
-    }
-
-    .time-interval-btn {
-        margin-right: 10px;
-    }
-    
-    .dataSet {
-        display: flex;
-        justify-content: space-between; 
-        align-items: center;
-        padding: 10px;
-    }
-
-    input[type="radio"] {
-        margin: 25px; 
-    }
-</style>
-
 
     <form method="post" action="{{ url_for('stock',stkName=stck) }}">
         <div class ="dataSet">

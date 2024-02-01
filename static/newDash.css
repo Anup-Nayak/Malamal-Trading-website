@@ -27,19 +27,7 @@ h1,h2,h3,h4,h5,h6{
      border-radius: 2 px;   
      border-style: solid;
 }
-/* #third{
-   padding-top: 0.4%;
-   padding-right: 0.53%;
-   padding-left:  2%;
-   
-   max-width:  13.5%;
-   max-height: 5% ; 
-   border-color: #ffff; 
-   border-radius: 0.15%;  
-   
-   
-   border-style: solid;
-} */
+
 a {
    text-decoration: none;
    font-family:sans-serif;
@@ -455,4 +443,7 @@ button:hover {
   
    justify-content: left;
 
+}
+#color_h1{
+   color: #000000 ;
 }

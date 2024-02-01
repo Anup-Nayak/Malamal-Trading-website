@@ -12,13 +12,13 @@
     
     .dataSet {
         display: flex;
-        justify-content: space-between; /* or other values like center, flex-start, flex-end */
+        justify-content: space-between; 
         align-items: center;
         padding: 10px;
     }
 
     input[type="radio"] {
-        margin: 25px; /* Adjust the margin as needed */
+        margin: 25px; 
     }
 </style>
 
@@ -42,10 +42,11 @@
             <button type="submit">Update Chart</button>
         </div>
     </form>
-
-    <h1> {{stck}} Data : </h1>
-    <div>
-        {{ cc | safe }}
+    <div id="fifth">
+        <h1 id = "color_h1"> {{stck}} Data : </h1>
     </div>
-
+            <div>
+                {{ cc | safe }}
+            </div>
+   
 {% endblock %}
