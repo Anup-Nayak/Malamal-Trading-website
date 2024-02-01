@@ -1,65 +1,70 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='newDash.css') }}">
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Stock Data{% endblock %}</title>
-    <!-- Add your CSS links or stylesheets here -->
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='newDash.css') }}">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Stock Data{% endblock %}</title>
+  <!-- Add your CSS links or stylesheets here -->
 </head>
+
 <body>
 
-<!-- Navigation Bar -->
+  <!-- Navigation Bar -->
 
 
-    
-<nav>
 
-    <div id = "first"  >
-        <div  id = "second" >
-           <img  src="static/images/groww.png" alt="image description" width = 150px height = 40 px>
-        </div>
-        <div  id = "third" >
-          <a  class="link"  href="#"><h3>Explore</h3></a>
-    
-        </div>
-        <div  id = "fourth" >
-           <a  class="link"  href="/dashboard"><h3>DASHBOARD</h3></a>
-    
-         </div>
-         <div  id = "third" >
-           <a  class="link"  href="/NIFTY50"><h3>NIFTY 50</h3></a>
-    
-         </div>
-         <div  id = "fourth" >
-            <a  class="link"  href="/filter"><h3>FILTER</h3></a>
-    
-          </div>
-          <div  id = "fourth" >
-           <a  class="link"  href="/logout"><h3>LOGOUT</h3></a>
-    
-         </div>
-       <div id = "fifth">
-          <!-- <div  id = "sixth" >
-             <a  class="link"  href="#"><h3>Stocks</h3></a>
-    
-           </div>
-           <div  id = "seventh" >
-              <a  class="link"  href="#"><h3>Mutual Funds</h3></a>
-    
-            </div> -->
-           
-       </div>
+  <nav>
+    <div id="first">
+      <div id="second">
+        <img src="static/images/groww.png" alt="image description" width=140px height=40 px>
+      </div>
 
-</nav>
+      <div class="nav1">
+        <a class="link" href="/dashboard">
+          <h3>DASHBOARD</h3>
+        </a>
 
-<!-- Sidebar -->
+      </div>
+      <div class="nav1">
+        <a class="link" href="/NIFTY50">
+          <h3>NIFTY 50</h3>
+        </a>
+
+      </div>
+      <div class="nav1">
+        <a class="link" href="/filter">
+          <h3>FILTER</h3>
+        </a>
+
+      </div>
+
+      <div class="nav2">
+
+      </div>
+
+      <div class="nav1">
+        <a class="link" href="/logout">
+          <h3>LOG OUT</h3>
+        </a>
+
+      </div>
+    </div>
+      <div class="line">
+      </div>
+    
+
+  </nav>
+
+  <!-- Sidebar -->
 
 
-<!-- Content Section -->
-<section>
+  <!-- Content Section -->
+  <section>
     {% block content %}{% endblock %}
-</section>
+  </section>
 
 </body>
+
 </html>

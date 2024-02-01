@@ -6,8 +6,6 @@ import plotly.graph_objects as go
 from jugaad_data import nse
 from dateutil.relativedelta import relativedelta
 from datetime import date
-from plotly.offline import iplot
-import yfinance as yf
 from nifty50 import nifty50
 from filter import filt
 
@@ -66,11 +64,10 @@ NIFTY50 = [
     "WIPRO"]
 
 app = Flask(__name__)
-app.secret_key = 'your_secret_key'  # Replace with your actual secret key
+app.secret_key = '2022CS51827'  
 
 app.register_blueprint(nifty50,url_prefix="/NIFTY50")
 app.register_blueprint(filt,url_prefix="/filter")
-
 
 # Database Configuration
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
@@ -274,7 +271,7 @@ def generate_candlestick_chart(df):
                                        low=df['LOW'],
                                        close=df['CLOSE'])
 
-    layout = go.Layout(title='Price vs Time', xaxis=dict(title='Date'), yaxis=dict(title='Price'),height=800)
+    layout = go.Layout(title='Price vs Time', xaxis=dict(title='Date'), yaxis=dict(title='Price'),height=750)
 
     figure = go.Figure(data=[candlestick_trace], layout=layout)
     figure.update_layout(
@@ -338,14 +335,10 @@ def gc(dfs,stockSyms):
     i = 0
     candlestick_traces = []
     for df in dfs:
-        candlestick_trace = go.Candlestick(x=df['DATE'],
-                                        open=df['OPEN'],
-                                        high=df['HIGH'],
-                                        low=df['LOW'],
-                                        close=df['CLOSE'],name=stockSyms[i])
-        candlestick_traces.append(candlestick_trace)
+        line_trace = go.Scatter(x=df['DATE'], y=df['CLOSE'], mode='lines', name=stockSyms[i])
+        candlestick_traces.append(line_trace)
         i = i+1
-    layout = go.Layout(title='Candlestick Chart', xaxis=dict(title='Date'), yaxis=dict(title='Price'),height=800)
+    layout = go.Layout(title='Line Graph', xaxis=dict(title='Date'), yaxis=dict(title='Price'),height=750)
     figure = go.Figure(data=candlestick_traces, layout=layout)
     figure.update_layout(
         xaxis=dict(

@@ -25,15 +25,20 @@
   
     </div>
 
-                      {% for item in filteredStocks : %}
+                      {% for i in range(0,len,2) : %}
 
-                      <div id = "tenth2">
-                         <div class="new" >
-                            
-                            <li>{{ item }}</li>
-                         </div>
+                        <div>
+                            <div class="new" >
+                                <li>{{ filteredStocks[i] }}</li>
+                             </div>
+    
+                             <div class="new" >
+                                <li>{{ filteredStocks[i+1] }}</li>
+                             </div>
+                        </div>
+                         
 
-                      </div>
+                      
 
                       {% endfor %}
 

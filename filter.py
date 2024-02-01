@@ -22,10 +22,10 @@ def filter():
         avg = request.form.get('avg')
         avg = float(avg)
         filtered_Stocks = filterStocks(avg)
-        print(filtered_Stocks)
-        return render_template('filter.html',filteredStocks = filtered_Stocks)
+        l = len(filtered_Stocks)
+        return render_template('filter.html',filteredStocks = filtered_Stocks, len = l)
     else:
-        return render_template('filter.html',filteredStocks = [])
+        return render_template('filter.html',filteredStocks = [], len = 0)
     
 def filterStocks(avg):
     filtered_stocks = []
