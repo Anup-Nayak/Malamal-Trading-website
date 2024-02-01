@@ -8,6 +8,8 @@ from dateutil.relativedelta import relativedelta
 from datetime import date
 from plotly.offline import iplot
 import yfinance as yf
+from nifty50 import nifty50
+from filter import filt
 
 yfd = ["AMZN", "MSFT", "AAPL", "GOOG", "NFLX", "TSLA", "FB", "GOOGL", "NVDA", "PYPL", "V", "INTC", "AMD", "DIS", "GS", "CSCO", "IBM", "BA", "WMT", "JPM"]
 
@@ -63,9 +65,12 @@ NIFTY50 = [
     "ULTRACEMCO",
     "WIPRO"]
 
-
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'  # Replace with your actual secret key
+
+app.register_blueprint(nifty50,url_prefix="/NIFTY50")
+app.register_blueprint(filt,url_prefix="/filter")
+
 
 # Database Configuration
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
@@ -127,12 +132,6 @@ def login():
             flash('Invalid username or password')
             return redirect(url_for('index'))
 
-# @app.route('/dashboard')
-# def dashboard():
-#     if 'user_id' in session:
-#         return render_template('welcome.html', username=session['username'])
-#     else:
-#         return redirect(url_for('index'))
 
 @app.route('/logout')
 def logout():
@@ -192,21 +191,30 @@ def view():
         if request.method == 'GET' or request.method == 'POST':
             userid = session['user_id']
             username = session['username']
+            timeInterval = request.form.get('interval')
             myStockData = Stock.query.filter_by(user_id=userid).all()
             myStocks = []
             for stocks in myStockData:
                 myStocks.append(stocks.symbol)
             endDate = date.today()
-            startDate = endDate - relativedelta(years = 5)
+            startDate = endDate - relativedelta(years = 9)
             dfs=[]
 
             for stockSym in myStocks:          
                 df = nse.stock_df(stockSym,startDate,endDate)
+                if timeInterval == 'weekly':
+                    df['idx'] = df['DATE']
+                    df.set_index('idx',inplace=True)
+                    df = df.resample('W').last()
+                elif timeInterval == 'monthly':
+                    df['idx'] = df['DATE']
+                    df.set_index('idx',inplace=True)
+                    df = df.resample('M').last()
                 dfs.append(df)
 
             candlestick_chart = gc(dfs,myStocks)
-            
-            return render_template('stock.html',cc = candlestick_chart)
+
+            return render_template('view.html',cc = candlestick_chart)
         else:
             return redirect(url_for('dashboard'))
 
@@ -229,7 +237,8 @@ def dashboard():
     else:
         flash('Please LOGIN!')
         return redirect(url_for('index'))
-    
+
+
 @app.route('/stock/<stkName>',methods=['GET','POST'])
 def stock(stkName):
 
@@ -239,22 +248,17 @@ def stock(stkName):
         endDate = date.today()
         startDate = endDate - relativedelta(years = 9)
         df = nse.stock_df(stkName,startDate,endDate)
-        # df = df.set_index('DATE')
+        
 
         if timeInterval == 'weekly':
             df['idx'] = df['DATE']
             df.set_index('idx',inplace=True)
             df = df.resample('W').last()
-            # df = df.set_index('DATE')
-            # df = df.resample('W')
             
         elif timeInterval == 'monthly':
             df['idx'] = df['DATE']
             df.set_index('idx',inplace=True)
             df = df.resample('M').last()
-        
-        # df = df.reset_index()
-        # print(df)
 
         candlestick_chart = generate_candlestick_chart(df)
         return render_template('stock.html',cc= candlestick_chart,stck=stkName)
@@ -273,32 +277,62 @@ def generate_candlestick_chart(df):
     layout = go.Layout(title='Price vs Time', xaxis=dict(title='Date'), yaxis=dict(title='Price'),height=800)
 
     figure = go.Figure(data=[candlestick_trace], layout=layout)
+    figure.update_layout(
+        xaxis=dict(
+            rangeselector=dict(
+                buttons=list([
+                    dict(count=1,
+                        label="1m",
+                        step="month",
+                        stepmode="backward"),
+                    dict(count=6,
+                        label="6m",
+                        step="month",
+                        stepmode="backward"),
+                    dict(count=1,
+                        label="1y",
+                        step="year",
+                        stepmode="backward"),
+                    dict(count=5,
+                        label="5y",
+                        step="year",
+                        stepmode="backward"),
+
+                    dict(step="all")
+                ])
+            ),
+            rangeslider=dict(
+                visible=True
+            ),
+            type="date"
+        )
+    )
     return figure.to_html(full_html=False)
 
 
-@app.route('/stocks',methods=['GET','POST'])
-def stocks():
-    stockSyms = ["SBIN","HDFC"]
-    dfs = []
-    if 'user_id' in session:
-        username = session['username']
-        if request.method == 'GET':
-            endDate = date.today()
-            startDate = endDate - relativedelta(years = 9)
-            for stockSym in stockSyms:          
-                df = nse.stock_df(stockSym,startDate,endDate)
-                dfs.append(df)
+# @app.route('/stocks',methods=['GET','POST'])
+# def stocks():
+#     stockSyms = ["SBIN","HDFC"]
+#     dfs = []
+#     if 'user_id' in session:
+#         username = session['username']
+#         if request.method == 'GET':
+#             endDate = date.today()
+#             startDate = endDate - relativedelta(years = 9)
+#             for stockSym in stockSyms:          
+#                 df = nse.stock_df(stockSym,startDate,endDate)
+#                 dfs.append(df)
 
 
-            candlestick_chart = gc(dfs,stockSyms)
+#             candlestick_chart = gc(dfs,stockSyms)
             
-            return render_template('stock.html',cc= candlestick_chart)
+#             return render_template('stock.html',cc= candlestick_chart)
 
-        else:
-            return redirect(url_for('index')) 
-    else:
-        flash('Please LOGIN!')
-        return redirect(url_for('index'))
+#         else:
+#             return redirect(url_for('index')) 
+#     else:
+#         flash('Please LOGIN!')
+#         return redirect(url_for('index'))
 
 def gc(dfs,stockSyms):
     i = 0
@@ -312,61 +346,39 @@ def gc(dfs,stockSyms):
         candlestick_traces.append(candlestick_trace)
         i = i+1
     layout = go.Layout(title='Candlestick Chart', xaxis=dict(title='Date'), yaxis=dict(title='Price'),height=800)
-
     figure = go.Figure(data=candlestick_traces, layout=layout)
+    figure.update_layout(
+        xaxis=dict(
+            rangeselector=dict(
+                buttons=list([
+                    dict(count=1,
+                        label="1m",
+                        step="month",
+                        stepmode="backward"),
+                    dict(count=6,
+                        label="6m",
+                        step="month",
+                        stepmode="backward"),
+                    dict(count=1,
+                        label="1y",
+                        step="year",
+                        stepmode="backward"),
+                    dict(count=5,
+                        label="5y",
+                        step="year",
+                        stepmode="backward"),
+
+                    dict(step="all")
+                ])
+            ),
+            rangeslider=dict(
+                visible=True
+            ),
+            type="date"
+        )
+    )
     return figure.to_html(full_html=False)
 
-@app.route('/NIFTY50',methods=['GET','POST'])
-def nifty():
-    df = pd.read_csv('NIFTY.csv')
-    df['DATE'] = pd.to_datetime(df['DATE'])
-
-    timeInterval = request.form.get('interval')
-    
-    if timeInterval == 'weekly':
-        df['idx'] = df['DATE']
-        df.set_index('idx',inplace=True)
-        df = df.resample('W').last()
-        # df = df.set_index('DATE')
-        # df = df.resample('W')
-        
-    elif timeInterval == 'monthly':
-        df['idx'] = df['DATE']
-        df.set_index('idx',inplace=True)
-        df = df.resample('M').last()
-        
-        # df = df.reset_index()
-        # print(df)
-
-    candlestick_chart = generate_candlestick_chart(df)
-    return render_template('nifty.html',cc= candlestick_chart,stck="NIFTY50")
-
-
-@app.route('/filter',methods=['GET','POST'])
-def filter():
-    if request.method == 'POST':
-        avg = request.form.get('avg')
-        avg = float(avg)
-        filtered_Stocks = filterStocks(avg)
-        print(filtered_Stocks)
-        return render_template('filter.html',filteredStocks = filtered_Stocks)
-    else:
-        return render_template('filter.html',filteredStocks = [])
-def filterStocks(avg):
-    filtered_stocks = []
-    for stock in yfd:
-        
-        a = yf.Ticker(stock)
-        endDate = date.today()
-        startDate = endDate - relativedelta(years = 9)
-        stock_data = a.history(period='max')
-        average_price = stock_data['Close'].mean()
-        
-
-        if average_price > avg:
-            filtered_stocks.append(stock)
-    
-    return filtered_stocks
 
 
 if __name__ == '__main__':

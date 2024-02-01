@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<style>
+    form {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+    .button-container {
+        display: flex;
+    }
+
+    .time-interval-btn {
+        margin-right: 10px;
+    }
+    
+    .dataSet {
+        display: flex;
+        justify-content: space-between; 
+        align-items: center;
+        padding: 10px;
+    }
+
+    input[type="radio"] {
+        margin: 25px; 
+    }
+</style>
+
+
+    <form method="post" action="{{ url_for('view') }}">
+        <div class ="dataSet">
+            <input type="radio" name="interval" id="daily" value="daily" checked>
+            <label for="daily">Daily</label>
+        </div>
+
+        <div class ="dataSet">
+            <input type="radio" name="interval" id="weekly" value="weekly">
+            <label for="weekly">Weekly</label>
+        </div>
+
+        <div class ="dataSet">
+            <input type="radio" name="interval" id="monthly" value="monthly">
+            <label for="monthly">Monthly</label>
+        </div>
+
+        <div class ="dataSet">
+            <button type="submit">Update Chart</button>
+        </div>
+    </form>
+
+    <h1> {{stck}} Data : </h1>
+    <div>
+        {{ cc | safe }}
+    </div>
+
+{% endblock %}
