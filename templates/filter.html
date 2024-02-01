@@ -2,53 +2,49 @@
 
 {% block content %}
 
-<div id = "fifth">
+<div id="fifth">
     <h3>Welcome {{username}} !!</h3>
 </div>
+<div id="fifth">
+    <h3>Enter the price of stock , for list of stocks having average stock price more than entered value : </h3>
+</div>
+<div id="id14">
+    <div id="id15">
+        <form action="/filter/" method="post">
 
-<form action="/filter/" method="post">
-    <div class="form-group">
-        <input type="number" name="avg" placeholder="average" >
+
+
+            <input id="filter_input" type="number" name="avg" placeholder="Average">
+
+            <button type="submit">FILTER</button>
+
+
+
+        </form>
     </div>
-    
-    <div class="form-group">
-        <button type="submit">FILTER</button>
-    </div>
-</form>
+</div>
 
-<div id = "tenth">
-    <div id = "tenth1">
-       <div id = "tenth11">
-          <p>These are the filtered stocks: </p>
-       </div>
-       
-  
+<div id="filter_list">
+
+    <div id="filter_list_header">
+        <h3>These are the filtered stocks: </h3>
     </div>
 
-                      {% for i in range(0,len,2) : %}
 
-                        <div>
-                            <div class="new" >
-                                <li>{{ filteredStocks[i] }}</li>
-                             </div>
-    
-                             <div class="new" >
-                                <li>{{ filteredStocks[i+1] }}</li>
-                             </div>
-                        </div>
-                         
+    <div id="filter_group">
+        {% for i in range(0,len-1) : %}
 
-                      
+        <div>
+            <div class="new">
+               <p>{{ filteredStocks[i] }}</p>
+            </div>
+        </div>
 
-                      {% endfor %}
+        {% endfor %}
 
-                      
-                      
+    </div>
 
-                      
-                  
-   
- </div>
+
 
 </div>
 

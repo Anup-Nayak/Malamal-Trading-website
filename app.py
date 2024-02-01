@@ -17,13 +17,11 @@ NIFTY50 = [
     "APOLLOHOSP",
     "ASIANPAINT",
     "AXISBANK",
-    "BAJAJ-AUTO",
     "BAJFINANCE",
     "BAJAJFINSV",
     "BPCL",
     "BHARTIARTL",
     "BRITANNIA",
-    "CIPLA",
     "COALINDIA",
     "DIVISLAB",
     "DRREDDY",
@@ -53,9 +51,7 @@ NIFTY50 = [
     "SBIN",
     "SUNPHARMA",
     "TCS",
-    "TATACONUM",
     "TATAGOLD",
-    "TATAMOTORS",
     "TATASTEEL", 
     "TECHM",
     "TITAN",
@@ -229,7 +225,7 @@ def dashboard():
                 return redirect(url_for('sell'))
         userid = session['user_id']
         username = session['username']
-        return render_template('newDash.html',username=username,nifty50= NIFTY50, stocks=Stock.query.filter_by(user_id=userid).all())
+        return render_template('newDash.html',username=username,nifty50 = NIFTY50, stocks=Stock.query.filter_by(user_id=userid).all())
 
     else:
         flash('Please LOGIN!')
