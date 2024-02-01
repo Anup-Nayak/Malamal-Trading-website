@@ -45,16 +45,14 @@
 
       <div id = "tenth">
          <div id = "tenth1">
-            <div id = "tenth11">
-               <p>Index</p>
-            </div>
+            
             <div id = "tenth12">
                <p>All indices</p>
             </div>
        
                         </div>
 
-                           {% for item in nifty50 : %}
+                           <!-- {% for item in nifty50 : %}
 
                            <div id = "tenth2">
                               <div class="new" >
@@ -64,7 +62,42 @@
 
                            </div>
 
+                           {% endfor %} -->
+
+                           {% for i in range(0,48,4) : %}
+
+                           <div id = "tenth2">
+                              <div class="new" >
+                                 {% set link = url_for('stock',stkName = nifty50[i]) %}
+                                 <a href='{{ link }}'>{{ nifty50[i] }}</a>
+                              </div>
+                              <div class="new">
+                                 {% set link = url_for('stock',stkName = nifty50[i+1]) %}
+                                 <a href='{{ link }}'>{{ nifty50[i+1] }}</a>
+                              </div>
+                              <div class="new">
+                                 {% set link = url_for('stock',stkName = nifty50[i+2]) %}
+                                 <a href='{{ link }}'>{{ nifty50[i+2] }}</a>
+                              </div>
+                              <div class="new">
+                                 {% set link = url_for('stock',stkName = nifty50[i+3]) %}
+                                 <a href='{{ link }}'>{{ nifty50[i+3] }}</a>
+                              </div>
+                                 
+
+                           </div>
+
                            {% endfor %}
+                           <div id = "tenth2">
+                              <div class="new" >
+                                 {% set link = url_for('stock',stkName = nifty50[48]) %}
+                                 <a href='{{ link }}'>{{ nifty50[48] }}</a>
+                              </div>
+                              <div class="new">
+                                 {% set link = url_for('stock',stkName = nifty50[49]) %}
+                                 <a href='{{ link }}'>{{ nifty50[49] }}</a>
+                              </div>
+                           </div>
 
                            
                            

@@ -15,7 +15,7 @@ NIFTY50 = [
     "ADANIENT",
     "ADANIPORTS",
     "APOLLOHOSP",
-    "ASIAN PAINTS",
+    "ASIANPAINT",
     "AXISBANK",
     "BAJAJ-AUTO",
     "BAJFINANCE",
@@ -24,31 +24,32 @@ NIFTY50 = [
     "BHARTIARTL",
     "BRITANNIA",
     "CIPLA",
-    "COALINDIA"
+    "COALINDIA",
     "DIVISLAB",
     "DRREDDY",
     "EICHERMOT",
     "GRASIM",
     "HCLTECH",
     "HDFCBANK",
-    "HERONOTOCO",
+    "HEROMOTOCO",
     "HDFCLIFE",
     "HINDALCO",
-    "HINDUNILVR"
+    "HINDUNILVR",
     "ICICIBANK",
     "ITC",
-    "INDUSINDBK"
+    "INDUSINDBK",
     "INFY",
-    "JSW STEEL",
+    "JSWSTEEL",
     "KOTAKBANK",
-    "LTIM"
+    "LTIM",
     "LT",
     "MARUTI",
     "NTPC",
-    "NESTLEIND"
+    "NESTLEIND",
     "ONGC",
     "POWERGRID",
     "RELIANCE",
+    "SBILIFE",
     "SBIN",
     "SUNPHARMA",
     "TCS",
@@ -240,21 +241,23 @@ def stock(stkName):
         df = nse.stock_df(stkName,startDate,endDate)
         # df = df.set_index('DATE')
 
-        # if timeInterval == 'weekly':
-            # df['DATE'] = pd.to_datetime(df['DATE'])
+        if timeInterval == 'weekly':
+            df['idx'] = df['DATE']
+            df.set_index('idx',inplace=True)
+            df = df.resample('W').last()
             # df = df.set_index('DATE')
             # df = df.resample('W')
             
-        # elif timeInterval == 'monthly':
-            # df['DATE'] = pd.to_datetime(df['DATE'])
-            # df = df.set_index('DATE')
-            # df = df.resample('M')
+        elif timeInterval == 'monthly':
+            df['idx'] = df['DATE']
+            df.set_index('idx',inplace=True)
+            df = df.resample('M').last()
         
         # df = df.reset_index()
         # print(df)
 
         candlestick_chart = generate_candlestick_chart(df)
-        return render_template('stock.html',cc= candlestick_chart,stock=stkName)
+        return render_template('stock.html',cc= candlestick_chart,stck=stkName)
 
     else:
         flash('Please LOGIN!')
@@ -313,12 +316,30 @@ def gc(dfs,stockSyms):
     figure = go.Figure(data=candlestick_traces, layout=layout)
     return figure.to_html(full_html=False)
 
-@app.route('/NIFTY50')
+@app.route('/NIFTY50',methods=['GET','POST'])
 def nifty():
     df = pd.read_csv('NIFTY.csv')
     df['DATE'] = pd.to_datetime(df['DATE'])
+
+    timeInterval = request.form.get('interval')
+    
+    if timeInterval == 'weekly':
+        df['idx'] = df['DATE']
+        df.set_index('idx',inplace=True)
+        df = df.resample('W').last()
+        # df = df.set_index('DATE')
+        # df = df.resample('W')
+        
+    elif timeInterval == 'monthly':
+        df['idx'] = df['DATE']
+        df.set_index('idx',inplace=True)
+        df = df.resample('M').last()
+        
+        # df = df.reset_index()
+        # print(df)
+
     candlestick_chart = generate_candlestick_chart(df)
-    return render_template('stock.html',cc= candlestick_chart,stock="NIFTY50")
+    return render_template('nifty.html',cc= candlestick_chart,stck="NIFTY50")
 
 
 @app.route('/filter',methods=['GET','POST'])

@@ -10,6 +10,11 @@
      border-style: solid;
      display: flex;
 }
+a{
+
+text-decoration:  none;
+
+}
 
 #second{
   padding-top: 14px;
