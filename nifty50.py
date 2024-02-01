@@ -2,7 +2,7 @@ from flask import Blueprint, render_template,request
 import pandas as pd
 import plotly.graph_objects as go
 
-nifty50 = Blueprint("nifty50",__name__,static_folder= "static",template_folder="template")
+nifty50 = Blueprint("nifty50",__name__,static_folder= "static",template_folder="templates")
 
 @nifty50.route('/',methods=['GET','POST'])
 def nifty():
