@@ -1,9 +1,9 @@
-COP290 Assignment 1 Task 2
+## COP290 Assignment 1 Task 2
 
 ANUP LAL NAYAK 2022CS51827
 LUCKY AHIRWAR 2022CS52049
 
-OBJECTIVE:
+### OBJECTIVE:
 
 The objective of this assignment is to build a user interface consisting of the following features:
 1. Plot the graph of a given stock on a defined time scale (daily, weekly etc)
